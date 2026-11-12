@@ -1,3 +1,4 @@
+
 package com.otgguardian.app.receiver
 
 import android.content.BroadcastReceiver
@@ -16,56 +17,73 @@ import kotlinx.coroutines.launch
 
 class UsbEventReceiver : BroadcastReceiver() {
 
-
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
         val dataStore = DataStoreManager(context)
 
         when (action) {
             UsbManager.ACTION_USB_DEVICE_ATTACHED -> {
-                val device = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
-                val deviceName = device?.productName ?: device?.deviceName ?: "USB Peripheral"
-                Log.i(TAG, "USB Device Attached: $deviceName (${device?.vendorId}:${device?.productId})")
+                val device = intent.getParcelableExtra<UsbDevice>(
+                    UsbManager.EXTRA_DEVICE
+                )
 
-                scope.launch {
-                    dataStore.recordStatusChange(OtgState.ON)
-                    dataStore.recordActivation()
-                }
+                val deviceName = device?.productName
+                    ?: device?.deviceName
+                    ?: "USB Peripheral"
+
+                Log.i(
+                    TAG,
+                    "USB Device Attached: $deviceName (${device?.vendorId}:${device?.productId})"
+                )
+
                 val pendingResult = goAsync()
+
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         dataStore.recordStatusChange(OtgState.ON)
                         dataStore.recordActivation()
 
                         Log.i(TAG, "USB attachment recorded successfully")
+
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to record USB attachment", e)
+
                     } finally {
                         pendingResult.finish()
                     }
                 }
-                        
-                // Notify monitoring service that active peripheral is holding the connection
+
                 OtgMonitoringService.onDeviceAttached(context, device)
             }
 
             UsbManager.ACTION_USB_DEVICE_DETACHED -> {
-                val device = intent.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
-                Log.i(TAG, "USB Device Detached: ${device?.productName ?: "USB Device"}")
+                val device = intent.getParcelableExtra<UsbDevice>(
+                    UsbManager.EXTRA_DEVICE
+                )
 
-                // OxygenOS begins its 10-minute inactivity shutdown countdown
+                Log.i(
+                    TAG,
+                    "USB Device Detached: ${device?.productName ?: "USB Device"}"
+                )
+
                 OtgMonitoringService.onDeviceDetached(context)
             }
 
             ACTION_RECOVER_OTG -> {
                 Log.i(TAG, "Manual recovery requested via broadcast intent")
-                RecoveryManager.performRecovery(context, "Action button pressed")
+
+                RecoveryManager.performRecovery(
+                    context,
+                    "Action button pressed"
+                )
             }
         }
     }
 
     companion object {
         private const val TAG = "UsbEventReceiver"
-        const val ACTION_RECOVER_OTG = "com.otgguardian.app.ACTION_RECOVER_OTG"
+
+        const val ACTION_RECOVER_OTG =
+            "com.otgguardian.app.ACTION_RECOVER_OTG"
     }
 }
