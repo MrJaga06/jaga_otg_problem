@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 
 class UsbEventReceiver : BroadcastReceiver() {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
@@ -32,7 +31,20 @@ class UsbEventReceiver : BroadcastReceiver() {
                     dataStore.recordStatusChange(OtgState.ON)
                     dataStore.recordActivation()
                 }
+                val pendingResult = goAsync()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        dataStore.recordStatusChange(OtgState.ON)
+                        dataStore.recordActivation()
 
+                        Log.i(TAG, "USB attachment recorded successfully")
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to record USB attachment", e)
+                    } finally {
+                        pendingResult.finish()
+                    }
+                }
+                        
                 // Notify monitoring service that active peripheral is holding the connection
                 OtgMonitoringService.onDeviceAttached(context, device)
             }
