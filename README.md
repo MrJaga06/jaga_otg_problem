@@ -2,11 +2,11 @@
 
 OTG Guardian is a project for monitoring USB OTG activity on Android, with a separate browser based dashboard for exploring the design. The dashboard's device behavior is simulated; it does not control a connected phone.
 
-## Download the Android app
+## Android APK
 
-[Download the latest debug APK](https://github.com/MrJaga06/jaga_otg_problem/releases/latest/download/app-debug.apk) · [All releases](https://github.com/MrJaga06/jaga_otg_problem/releases)
+[View APK build status and available build artifacts](https://github.com/MrJaga06/jaga_otg_problem/actions/workflows/android-apk.yml) · [All releases](https://github.com/MrJaga06/jaga_otg_problem/releases)
 
-GitHub Actions builds the native Android app on changes to `main`. To publish a downloadable APK, create and push a version tag such as `v1.0.0`; the release workflow attaches `app-debug.apk` to that GitHub Release. Debug builds are unsigned for Play Store distribution and are intended for testing.
+GitHub Actions is configured to build the native Android app on changes to `main`. Successful runs publish a temporary APK artifact; pushing a version tag such as `v1.0.0` also attaches the APK to a GitHub Release. The current `v1.0.0` run failed before producing an APK, so no release download is available yet. Debug builds are unsigned for Play Store distribution and are intended for testing.
 
 ## What is in this repository?
 
