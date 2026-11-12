@@ -124,7 +124,7 @@ class OtgAccessibilityService : AccessibilityService() {
             armedForToggle = true
             Handler(Looper.getMainLooper()).postDelayed({
                 if (armedForToggle) {
-                    Log.d("OtgAccessibilityService", "Disarming auto-toggle after timeout.")
+                    Log.d(TAG, "Disarming auto-toggle after timeout.")
                     armedForToggle = false
                 }
             }, 10000)
