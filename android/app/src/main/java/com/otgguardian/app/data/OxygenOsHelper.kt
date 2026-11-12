@@ -105,22 +105,47 @@ object OxygenOsHelper {
     /**
      * Tries direct hardware/system setting toggle if privileged permission is granted via ADB.
      */
+    
+
     fun tryDirectToggle(context: Context, enable: Boolean): Boolean {
-        if (!hasWriteSecureSettings(context)) return false
+        if (!hasWriteSecureSettings(context)) {
+            Log.w(TAG, "WRITE_SECURE_SETTINGS not granted.")
+            return false
+        }
+
         val targetValue = if (enable) 1 else 0
 
         return try {
-            Settings.Global.putInt(context.contentResolver, SETTING_OTG_ENABLED, targetValue)
-            try {
-                Settings.Global.putInt(context.contentResolver, SETTING_OPLUS_OTG_STATE, targetValue)
-            } catch (_: Exception) {}
-            Log.i(TAG, "Directly wrote otg_enabled = $targetValue via WRITE_SECURE_SETTINGS")
+            val writeAccepted = Settings.Global.putInt(
+                context.contentResolver,
+                SETTING_OTG_ENABLED,
+                targetValue
+            )
+
+            if (!writeAccepted) {
+                Log.w(TAG, "Android rejected the OTG setting write.")
+                return false
+            }
+
+            val actualValue = Settings.Global.getInt(
+                context.contentResolver,
+                SETTING_OTG_ENABLED,
+                -1
+            )
+
+            if (actualValue != targetValue) {
+                Log.w(TAG, "OTG setting read-back did not match.")
+                return false
+            }
+
+            Log.i(TAG, "OTG setting value successfully written and verified.")
             true
+
         } catch (e: SecurityException) {
-            Log.e(TAG, "SecurityException writing secure settings: ${e.message}")
+            Log.e(TAG, "Missing permission for direct OTG setting.", e)
             false
         } catch (e: Exception) {
-            Log.e(TAG, "Exception writing secure settings", e)
+            Log.e(TAG, "Direct OTG setting failed.", e)
             false
         }
     }
