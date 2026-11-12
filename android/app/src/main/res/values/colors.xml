@@ -1,0 +1,9 @@
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="dark_surface">#FF0F172A</color>
+    <color name="cyan_accent">#FF06B6D4</color>
+    <color name="blue_accent">#FF3B82F6</color>
+    <color name="emerald_active">#FF10B981</color>
+    <color name="rose_alert">#FFF43F5E</color>
+    <color name="amber_warning">#FFF59E0B</color>
+</resources>

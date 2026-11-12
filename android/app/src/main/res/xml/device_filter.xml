@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Filter to catch any USB peripheral: mass storage, HID, audio, hubs, serial -->
+    <usb-device />
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">OTG Guardian</string>
+    <string name="tile_label">OTG Guard</string>
+    <string name="accessibility_service_description">OTG Guardian Auto-Assist safely locates the OxygenOS 14 "OTG connection" switch to automatically re-enable OTG when it turns off after the 10-minute inactivity limit.</string>
+    <string name="notification_channel_name">OTG Guardian Monitor</string>
+    <string name="notification_channel_desc">Active background monitoring and timeout alerts for USB OTG state</string>
+    <string name="notification_alert_channel_name">OTG Timeout Recovery</string>
+    <string name="notification_alert_channel_desc">High-priority alerts when OTG turns off with quick 1-tap recovery</string>
+</resources>

@@ -1,0 +1,6 @@
+{
+  "name": "OTG Guardian - OnePlus OxygenOS OTG Auto-Maintenance",
+  "description": "Native Android utility and developer suite for OnePlus Nord CE 2 Lite 5G (OxygenOS 14) to monitor, keep enabled, and auto-recover OTG functionality against the 10-minute timeout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
