@@ -108,6 +108,7 @@ class OtgAccessibilityService : AccessibilityService() {
     }
 
     companion object {
+        private const val TAG = "OtgAccessibilityService"
         var isRunning: Boolean = false
             private set
 
@@ -129,4 +130,5 @@ class OtgAccessibilityService : AccessibilityService() {
             }, 10000)
         }
     }
+    
 }
