@@ -29,6 +29,7 @@ class OtgMonitoringService : Service() {
     private lateinit var dataStore: DataStoreManager
 
     private var countdownJob: Job? = null
+    @Volatile
     private var isDeviceConnected: Boolean = false
     private var lastAttachedDeviceName: String? = null
 
