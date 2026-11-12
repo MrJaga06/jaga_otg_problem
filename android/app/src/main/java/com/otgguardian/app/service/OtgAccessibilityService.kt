@@ -78,8 +78,8 @@ class OtgAccessibilityService : AccessibilityService() {
                     Log.d(TAG, "Performed ACTION_CLICK on checkable switch: $clicked")
                     return clicked
                 } else {
-                    Log.d(TAG, "Switch is already checked ON.")
-                    return true
+                    Log.d(TAG, "OTG switch is already ON. No toggle needed.")
+                    return false
                 }
             }
         }
