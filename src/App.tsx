@@ -14,17 +14,19 @@ import {
   ExternalLink,
   Info,
   Sliders,
-  CheckCircle2
+  CheckCircle2,
+  ArrowDownCircle
 } from 'lucide-react';
 import { PhoneSimulator } from './components/PhoneSimulator';
 import { HardwareControlDeck } from './components/HardwareControlDeck';
 import { OxygenOsAuditMatrix } from './components/OxygenOsAuditMatrix';
 import { ProjectCodeExplorer } from './components/ProjectCodeExplorer';
 import { AdbTerminalHelper } from './components/AdbTerminalHelper';
+import { ApkDownloadCard } from './components/ApkDownloadCard';
 import { OtgState, RecoveryMode, SimulatedUsbDevice, SimulatedLogEvent } from './types';
 
 export default function App() {
-  const [activeMainTab, setActiveMainTab] = useState<'simulator' | 'audit' | 'code' | 'adb'>('simulator');
+  const [activeMainTab, setActiveMainTab] = useState<'simulator' | 'apk' | 'audit' | 'code' | 'adb'>('apk');
   const [mobileSubTab, setMobileSubTab] = useState<'app' | 'deck'>('app');
   const [isFrameless, setIsFrameless] = useState<boolean>(true);
 
@@ -219,15 +221,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5 sm:gap-4">
           
           {/* Brand Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white shadow-md shadow-cyan-950">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white shadow-md shadow-cyan-950 shrink-0">
                 <Usb className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 flex-wrap">
                   <h1 className="text-sm sm:text-base font-black tracking-wide text-white">OTG GUARDIAN</h1>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold">
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold shrink-0">
                     OnePlus CPH2381
                   </span>
                 </div>
@@ -237,17 +239,32 @@ export default function App() {
               </div>
             </div>
 
-            {/* Quick Live Status indicator on Mobile */}
-            <div className="flex md:hidden items-center gap-1.5 text-[10px] font-mono">
-              <div className={`w-2 h-2 rounded-full ${otgState === 'ON' ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
-              <span className={otgState === 'ON' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
-                {otgState}
-              </span>
-            </div>
+            {/* Direct Download Button in Header */}
+            <a
+              href="/otg-guardian.apk"
+              download="otg-guardian.apk"
+              className="py-1.5 px-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black font-extrabold text-xs rounded-lg flex items-center gap-1.5 shadow-md shadow-cyan-950/40 shrink-0 transition-transform active:scale-95"
+            >
+              <Download className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span className="hidden sm:inline">Download APK</span>
+              <span className="sm:hidden">APK</span>
+            </a>
           </div>
 
-          {/* Navigation Tabs - Horizontally scrollable on mobile with zero wrapping bugs */}
+          {/* Navigation Tabs - Horizontally scrollable on mobile */}
           <div className="w-full md:w-auto flex items-center gap-1 p-1 bg-[#0c1220] rounded-xl border border-slate-800 overflow-x-auto scrollbar-none">
+            <button
+              onClick={() => setActiveMainTab('apk')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                activeMainTab === 'apk'
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-black shadow-md'
+                  : 'text-cyan-400 hover:text-white bg-cyan-950/40 border border-cyan-800/40'
+              }`}
+            >
+              <ArrowDownCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>Download APK (Installed App)</span>
+            </button>
+
             <button
               onClick={() => setActiveMainTab('simulator')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
@@ -281,7 +298,7 @@ export default function App() {
               }`}
             >
               <FileCode2 className="w-3.5 h-3.5 shrink-0" />
-              <span>Android Code &amp; ZIP</span>
+              <span>Source Code &amp; ZIP</span>
             </button>
 
             <button
@@ -301,9 +318,35 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-2 sm:px-6 lg:px-8 py-3 sm:py-6">
+        {/* APK Download View */}
+        {activeMainTab === 'apk' && (
+          <div className="max-w-4xl mx-auto space-y-5">
+            <ApkDownloadCard />
+          </div>
+        )}
+
+        {/* Interactive Device Simulator View */}
         {activeMainTab === 'simulator' && (
           <div className="space-y-4">
             
+            {/* Quick APK Banner */}
+            <div className="p-3 bg-gradient-to-r from-[#0c1b33] to-[#08182b] rounded-xl border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-slate-200">
+                  Real Signed Android APK is built and ready for OnePlus Nord CE 2 Lite 5G.
+                </span>
+              </div>
+              <a
+                href="/otg-guardian.apk"
+                download="otg-guardian.apk"
+                className="py-1 px-3 bg-cyan-500 text-black font-bold rounded-lg hover:bg-cyan-400 flex items-center gap-1 shrink-0"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Get otg-guardian.apk</span>
+              </a>
+            </div>
+
             {/* Mobile View Switcher (Visible on screens < lg) */}
             <div className="flex lg:hidden bg-[#0c1220] p-1 rounded-xl border border-slate-800 text-xs font-bold w-full max-w-md mx-auto">
               <button
@@ -418,18 +461,21 @@ export default function App() {
           </div>
         )}
 
+        {/* Technical Audit View */}
         {activeMainTab === 'audit' && (
           <div className="max-w-5xl mx-auto">
             <OxygenOsAuditMatrix />
           </div>
         )}
 
+        {/* Source Code View */}
         {activeMainTab === 'code' && (
           <div className="max-w-6xl mx-auto">
             <ProjectCodeExplorer />
           </div>
         )}
 
+        {/* ADB & Testing View */}
         {activeMainTab === 'adb' && (
           <div className="max-w-5xl mx-auto">
             <AdbTerminalHelper />

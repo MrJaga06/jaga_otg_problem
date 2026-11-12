@@ -102,14 +102,25 @@ adb shell dumpsys deviceidle whitelist +com.otgguardian.app
           </p>
         </div>
 
-        <button
-          onClick={handleDownloadZip}
-          disabled={isZipping}
-          className="w-full sm:w-auto py-2.5 px-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-cyan-900/30 flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50 shrink-0"
-        >
-          <Download className="w-4 h-4" />
-          <span>{isZipping ? 'Packaging ZIP...' : zipSuccess ? 'Downloaded!' : 'Download Project (.ZIP)'}</span>
-        </button>
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto shrink-0">
+          <a
+            href="/otg-guardian.apk"
+            download="otg-guardian.apk"
+            className="w-full sm:w-auto py-2.5 px-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black text-xs font-black rounded-xl shadow-lg shadow-emerald-950/40 flex items-center justify-center gap-2 cursor-pointer transition-all shrink-0"
+          >
+            <Download className="w-4 h-4 stroke-[2.5]" />
+            <span>Download APK File</span>
+          </a>
+
+          <button
+            onClick={handleDownloadZip}
+            disabled={isZipping}
+            className="w-full sm:w-auto py-2.5 px-4 bg-[#142038] hover:bg-[#1a2c4e] border border-cyan-500/40 text-cyan-300 text-xs font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50 shrink-0"
+          >
+            <Download className="w-4 h-4" />
+            <span>{isZipping ? 'Packaging ZIP...' : zipSuccess ? 'Downloaded!' : 'Download Project (.ZIP)'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Code Browser Grid */}

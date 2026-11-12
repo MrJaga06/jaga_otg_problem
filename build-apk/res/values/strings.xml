@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OTG Guardian</string>
+    <string name="tile_label">OTG Guard</string>
+    <string name="accessibility_service_desc">OTG Guardian safely navigates to the OxygenOS OTG toggle and re-enables it automatically upon inactivity timeout.</string>
+</resources>
