@@ -30,14 +30,7 @@ object RecoveryManager {
         Log.i(TAG, "Initiating recovery workflow: $reason")
 
         // 1. Check if ADB-granted WRITE_SECURE_SETTINGS is present
-        if (OxygenOsHelper.hasWriteSecureSettings(context)) {
-            val directSuccess = OxygenOsHelper.tryDirectToggle(context, true)
-            if (directSuccess) {
-                Log.i(TAG, "Recovery successful via WRITE_SECURE_SETTINGS direct toggle")
-                notifyUser(context, "OTG Auto-Restored", "OTG was automatically re-enabled via direct system setting.")
-                return RecoveryResult.DirectSettingsSuccess
-            }
-        }
+        //
 
         // 2. Check if Accessibility Service is active and authorized
         if (OtgAccessibilityService.isRunning) {
